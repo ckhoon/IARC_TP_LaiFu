@@ -828,31 +828,31 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
     { rc_loop,               1,     100 },
     { throttle_loop,         2,     450 },
-    { update_GPS,            2,     900 },
+//    { update_GPS,            2,     900 },
     { update_batt_compass,  10,     720 },
     { read_aux_switches,    10,      50 },
     { arm_motors_check,     10,      10 },
-    { auto_trim,            10,     140 },
+//    { auto_trim,            10,     140 },
     { update_altitude,      10,    1000 },
-    { run_nav_updates,      10,     800 },
-    { update_thr_cruise,     1,      50 },
-    { three_hz_loop,        33,      90 },
+//    { run_nav_updates,      10,     800 },
+//    { update_thr_cruise,     1,      50 },
+//    { three_hz_loop,        33,      90 },
     { compass_accumulate,    2,     420 },
-    { barometer_accumulate,  2,     250 },
+//    { barometer_accumulate,  2,     250 },
 #if FRAME_CONFIG == HELI_FRAME
     { check_dynamic_flight,  2,     100 },
 #endif
-    { update_notify,         2,     100 },
+//    { update_notify,         2,     100 },
     { one_hz_loop,         100,     420 },
     { crash_check,          10,      20 },
     { gcs_check_input,	     2,     550 },
     { gcs_send_heartbeat,  100,     150 },
     { gcs_send_deferred,     2,     720 },
     { gcs_data_stream_send,  2,     950 },
-    { update_mount,          2,     450 },
+//    { update_mount,          2,     450 },
     { ten_hz_logging_loop,  10,     300 },
     { fifty_hz_logging_loop, 2,     220 },
-    { perf_update,        1000,     200 },
+//    { perf_update,        1000,     200 },
     { read_receiver_rssi,   10,      50 },
 #ifdef USERHOOK_FASTLOOP
     { userhook_FastLoop,     1,    100  },
@@ -1351,7 +1351,8 @@ static void update_altitude()
     baro_alt            = read_barometer();
 
     // read in sonar altitude
-    sonar_alt           = read_sonar();
+    //sonar_alt           = read_sonar();
+    sonar_alt = raw_of_z;
 
     // write altitude info to dataflash logs
     if (g.log_bitmask & MASK_LOG_CTUN) {

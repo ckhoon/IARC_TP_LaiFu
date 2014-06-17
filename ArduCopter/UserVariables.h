@@ -14,6 +14,11 @@ int                 WiiDisplacementX=0;
 int                 WiiDisplacementY=0;
 #endif  // WII_CAMERA
 
+static mavlink_optical_flow_t raw_flow_read;
+static uint64_t raw_of_last_update = 0;
+static float raw_of_x_cm=0, raw_of_y_cm=0;
+static int16_t raw_of_z=0;
+
 #endif  // USERHOOK_VARIABLES
 
 
