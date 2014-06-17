@@ -95,12 +95,13 @@ static void init_ardupilot()
     hal.uartA->begin(map_baudrate(g.serial0_baud), 512, 128);
 #endif
 
+    /*
     // GPS serial port.
     //
 #if GPS_PROTOCOL != GPS_PROTOCOL_IMU
     // standard gps running. Note that we need a 256 byte buffer for some
     // GPS types (eg. UBLOX)
-    hal.uartB->begin(38400, 256, 16);
+    //hal.uartB->begin(38400, 256, 16); //disable to allow OF using of the same port.
 #endif
 
 #if GPS2_ENABLE
@@ -108,7 +109,7 @@ static void init_ardupilot()
         hal.uartE->begin(38400, 256, 16);
     }
 #endif
-
+*/
     cliSerial->printf_P(PSTR("\n\nInit " FIRMWARE_STRING
                          "\n\nFree RAM: %u\n"),
                         hal.util->available_memory());
@@ -223,7 +224,7 @@ static void init_ardupilot()
  #endif // CONFIG_ADC
 
     // Do GPS init
-    gps.init(&DataFlash);
+    //gps.init(&DataFlash); //disable GPS init
 
     if(g.compass_enabled)
         init_compass();
