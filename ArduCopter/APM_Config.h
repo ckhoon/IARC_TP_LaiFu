@@ -22,7 +22,7 @@
 #if (CONFIG_HAL_BOARD == HAL_BOARD_APM2 || CONFIG_HAL_BOARD == HAL_BOARD_APM1)
  //# define CLI_ENABLED           DISABLED            // disable the CLI (command-line-interface) to save 21K of flash space
 #endif
-#define LOGGING_ENABLED       DISABLED            // disable dataflash logging to save 11K of flash space
+//#define LOGGING_ENABLED       DISABLED            // disable dataflash logging to save 11K of flash space
 #define MOUNT                 DISABLED            // disable the camera gimbal to save 8K of flash space
 #define AUTOTUNE_ENABLED      DISABLED            // disable the auto tune functionality to save 7k of flash
 #define AC_FENCE              DISABLED            // disable fence to save 2k of flash
@@ -52,4 +52,4 @@
 //#define USERHOOK_50HZLOOP userhook_50Hz();                  // for code to be run at 50hz
 //#define USERHOOK_MEDIUMLOOP userhook_MediumLoop();        // for code to be run at 10hz
 //#define USERHOOK_SLOWLOOP userhook_SlowLoop();            // for code to be run at 3.3hz
-#define USERHOOK_SUPERSLOWLOOP userhook_SuperSlowLoop();  // for code to be run at 1hz
+//#define USERHOOK_SUPERSLOWLOOP userhook_SuperSlowLoop();  // for code to be run at 1hz
