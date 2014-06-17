@@ -106,6 +106,9 @@ void AVRUARTDriver::begin(uint32_t baud, uint16_t rxSpace, uint16_t txSpace) {
 		if (baud == 57600)
 			use_u2x = false;
 #endif
+		if (baud ==115200 && txSpace == 32){
+			use_u2x = false;		//avoid the APM controller from dropping OF_msgs due to wrong decode from UARTB port.
+		}
 
 		if (use_u2x) {
 			*_ucsra = 1 << _u2x;
