@@ -49,7 +49,11 @@ void handleOfMessage(mavlink_message_t* of_msg)
     }
 
     if (raw_flow_read.ground_distance > 0){
-    	raw_of_z = (int16_t)(raw_flow_read.ground_distance * 100);
+    	int16_t new_z = (int16_t)(raw_flow_read.ground_distance * 100);
+    	int16_t dz = raw_of_z - new_z;
+        if(dz<150.0 && dz>-150.0){
+        	raw_of_z = new_z;
+        }
     }
 
 	//hal.console->printf(("\nx : %.5f _____________ y : %.5f"), raw_of_x_cm, raw_of_y_cm);
