@@ -95,17 +95,18 @@ static void ofloiter_run()
 static int32_t get_of_roll(int32_t input_roll)
 {
 #if OPTFLOW == ENABLED
-    static float tot_x_cm = 0;      // total distance from target
+//    static float tot_x_cm = 0;      // total distance from target
     static uint32_t last_of_roll_update = 0;
     int32_t new_roll = 0;
     int32_t p,i,d;
 
     // check if new optflow data available
-    if( optflow.last_update != last_of_roll_update) {
-        last_of_roll_update = optflow.last_update;
+    if( raw_of_last_update != last_of_roll_update) {
+        last_of_roll_update = raw_of_last_update;
 
         // add new distance moved
-        tot_x_cm += optflow.x_cm;
+        tot_x_cm += raw_of_x_cm;
+        raw_of_x_cm = 0;
 
         // only stop roll if caller isn't modifying roll
         if( input_roll == 0 && current_loc.alt < 1500) {
@@ -136,17 +137,18 @@ static int32_t get_of_roll(int32_t input_roll)
 static int32_t get_of_pitch(int32_t input_pitch)
 {
 #if OPTFLOW == ENABLED
-    static float tot_y_cm = 0;  // total distance from target
+//    static float tot_y_cm = 0;  // total distance from target
     static uint32_t last_of_pitch_update = 0;
     int32_t new_pitch = 0;
     int32_t p,i,d;
 
     // check if new optflow data available
-    if( optflow.last_update != last_of_pitch_update ) {
-        last_of_pitch_update = optflow.last_update;
+    if( raw_of_last_update != last_of_pitch_update ) {
+        last_of_pitch_update = raw_of_last_update;
 
         // add new distance moved
-        tot_y_cm += optflow.y_cm;
+        tot_y_cm += raw_of_y_cm;
+        raw_of_y_cm = 0;
 
         // only stop roll if caller isn't modifying pitch
         if( input_pitch == 0 && current_loc.alt < 1500 ) {

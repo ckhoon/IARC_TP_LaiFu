@@ -342,7 +342,7 @@ AP_Mission mission(ahrs, &start_command, &verify_command, &exit_mission, MISSION
 // Optical flow sensor
 ////////////////////////////////////////////////////////////////////////////////
  #if OPTFLOW == ENABLED
-static AP_OpticalFlow_ADNS3080 optflow;
+//static AP_OpticalFlow_ADNS3080 optflow;
  #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -979,9 +979,10 @@ static void fast_loop()
     // optical flow
     // --------------------
 #if OPTFLOW == ENABLED
-    if(g.optflow_enabled) {
-        update_optical_flow();
-    }
+//done in usercode
+//    if(g.optflow_enabled) {
+//        update_optical_flow();
+//    }
 #endif  // OPTFLOW == ENABLED
 
 }
@@ -1170,6 +1171,8 @@ static void one_hz_loop()
 #if OPTFLOW == ENABLED
 static void update_optical_flow(void)
 {
+	// done in usercode
+    /*
     static uint32_t last_of_update = 0;
     static uint8_t of_log_counter = 0;
 
@@ -1187,6 +1190,7 @@ static void update_optical_flow(void)
             }
         }
     }
+    */
 }
 #endif  // OPTFLOW == ENABLED
 

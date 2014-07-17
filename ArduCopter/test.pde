@@ -198,7 +198,7 @@ static int8_t
 test_optflow(uint8_t argc, const Menu::arg *argv)
 {
 #if OPTFLOW == ENABLED
-    if(g.optflow_enabled) {
+	if(g.optflow_enabled) {
         cliSerial->printf_P(PSTR("man id: %d\t"),optflow.read_register(ADNS3080_PRODUCT_ID));
         print_hit_enter();
 

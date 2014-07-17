@@ -235,11 +235,11 @@ static void Log_Write_Current()
 
 struct PACKED log_Optflow {
     LOG_PACKET_HEADER;
-    int16_t dx;
-    int16_t dy;
+    float dx;
+    float dy;
     uint8_t surface_quality;
-    int16_t x_cm;
-    int16_t y_cm;
+    float x_cm;
+    float y_cm;
     int32_t roll;
     int32_t pitch;
 };
@@ -250,12 +250,12 @@ static void Log_Write_Optflow()
  #if OPTFLOW == ENABLED
     struct log_Optflow pkt = {
         LOG_PACKET_HEADER_INIT(LOG_OPTFLOW_MSG),
-        dx              : optflow.dx,
-        dy              : optflow.dy,
-        surface_quality : optflow.surface_quality,
-        x_cm            : (int16_t) optflow.x_cm,
-        y_cm            : (int16_t) optflow.y_cm,
-        roll            : of_roll,
+        dx              : tot_x_cm,
+        dy              : tot_y_cm,
+        surface_quality : (uint8_t) raw_flow_read.quality,
+        x_cm            : of_x_cm,
+        y_cm            : of_y_cm,
+        roll            : -of_roll,
         pitch           : of_pitch
     };
     DataFlash.WriteBlock(&pkt, sizeof(pkt));
@@ -673,7 +673,7 @@ static const struct LogStructure log_structure[] PROGMEM = {
     { LOG_CURRENT_MSG, sizeof(log_Current),             
       "CURR", "IhIhhhf",     "TimeMS,ThrOut,ThrInt,Volt,Curr,Vcc,CurrTot" },
     { LOG_OPTFLOW_MSG, sizeof(log_Optflow),       
-      "OF",   "hhBccee",   "Dx,Dy,SQual,X,Y,Roll,Pitch" },
+      "OF",   "ffBffee",   "Dx,Dy,SQual,X,Y,Roll,Pitch" },
     { LOG_NAV_TUNING_MSG, sizeof(log_Nav_Tuning),       
       "NTUN", "Iffffffffff", "TimeMS,DPosX,DPosY,PosX,PosY,DVelX,DVelY,VelX,VelY,DAccX,DAccY" },
     { LOG_CONTROL_TUNING_MSG, sizeof(log_Control_Tuning),

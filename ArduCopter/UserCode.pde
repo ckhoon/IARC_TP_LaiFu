@@ -16,9 +16,9 @@ void userhook_FastLoop()
     // put your 100Hz code here
     mavlink_message_t of_msg;
     mavlink_status_t of_stat;
-    mavlink_channel_t of_ch;
 
     uint16_t nbytes = comm_get_available(MAVLINK_COMM_1);
+    static uint8_t of_log_counter = 0;
 
     for (uint16_t i=0; i<nbytes; i++)
     {
@@ -26,8 +26,15 @@ void userhook_FastLoop()
 		if (mavlink_parse_char(MAVLINK_COMM_1, c, &of_msg, &of_stat)) {
 			if (of_msg.msgid == MAVLINK_MSG_ID_OPTICAL_FLOW) {
 				handleOfMessage(&of_msg);
+				//i=nbytes;
 			}
 		}
+    }
+
+    of_log_counter++;
+    if( of_log_counter >= 4 ) {
+        of_log_counter = 0;
+            Log_Write_Optflow();
     }
 
 }
@@ -36,23 +43,31 @@ void handleOfMessage(mavlink_message_t* of_msg)
 {
     mavlink_msg_optical_flow_decode(of_msg, &raw_flow_read);
 
-    if (raw_flow_read.quality > 60)
+    if (raw_of_last_update == 0)
     {
-        if (raw_of_last_update == 0)
-        {
-        	raw_of_last_update = raw_flow_read.time_usec;
-        }
-		uint64_t of_dt = raw_flow_read.time_usec - raw_of_last_update;
-		raw_of_last_update = raw_flow_read.time_usec;
-		raw_of_y_cm += raw_flow_read.flow_comp_m_x * of_dt * 100 / 1000000;
-		raw_of_x_cm += raw_flow_read.flow_comp_m_y * of_dt * 100 / 1000000;
+    	raw_of_last_update = raw_flow_read.time_usec;
+    	return;
+    }
+    int32_t of_dt = raw_flow_read.time_usec - raw_of_last_update;
+	log_of_dt = of_dt;
+	raw_of_last_update = raw_flow_read.time_usec;
+
+	if (raw_flow_read.quality > 250)
+    {
+		if (of_dt < 30000 && of_dt > 0){
+			raw_of_y_cm += raw_flow_read.flow_comp_m_x * (float)of_dt * 0.0001; // distance / time scale = 100 / 1000000
+			of_y_cm += raw_flow_read.flow_comp_m_x * (float)of_dt * 0.0001;
+			raw_of_x_cm += (raw_flow_read.flow_comp_m_y) * (float)of_dt * 0.0001;
+			of_x_cm += (raw_flow_read.flow_comp_m_y) * (float)of_dt * 0.0001;
+		}
     }
 
     if (raw_flow_read.ground_distance > 0){
+    	sonar_alt_health = SONAR_ALT_HEALTH_MAX;
     	int16_t new_z = (int16_t)(raw_flow_read.ground_distance * 100);
     	int16_t dz = raw_of_z - new_z;
         if(dz<150.0 && dz>-150.0){
-        	raw_of_z = new_z;
+        	raw_of_z = (new_z + raw_of_z)/2;
         }
     }
 
